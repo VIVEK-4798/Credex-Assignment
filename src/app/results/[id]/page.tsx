@@ -174,7 +174,8 @@ export default function AuditResultsPage({ params }: AuditResultsPageProps) {
                   ))
                 ) : (
                   <Card className="p-6 border-gray-200 text-center text-gray-500">
-                    No recommendations at this time.
+                    {result.optimizedOutcome ||
+                      'Your current AI stack appears reasonably optimized for your team size and usage pattern.'}
                   </Card>
                 )}
               </div>

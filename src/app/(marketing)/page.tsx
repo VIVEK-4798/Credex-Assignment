@@ -141,7 +141,7 @@ export default function LandingPage() {
       <section className="px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl">
           <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-            What You'll Discover
+            What You&apos;ll Discover
           </h2>
           <div className="space-y-6">
             {[

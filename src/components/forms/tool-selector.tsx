@@ -14,6 +14,14 @@ interface ToolSelectorProps {
   existingTools: UserToolInput[];
 }
 
+function createToolInputId(): string {
+  if (typeof crypto !== 'undefined' && 'randomUUID' in crypto) {
+    return crypto.randomUUID();
+  }
+
+  return `${Date.now().toString(36)}-${performance.now().toString(36)}`;
+}
+
 export function ToolSelector({ onAddTool, existingTools }: ToolSelectorProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedTool, setSelectedTool] = useState<string | null>(null);
@@ -39,11 +47,11 @@ export function ToolSelector({ onAddTool, existingTools }: ToolSelectorProps) {
     if (!selectedTool || !selectedPlan || !monthlySpend) return;
 
     const newTool: UserToolInput = {
-      id: Math.random().toString(36),
+      id: createToolInputId(),
       toolId: selectedTool,
       planId: selectedPlan,
       monthlySpend: parseFloat(monthlySpend),
-      seats: currentTool?.plans.find(p => p.id === selectedPlan)?.seatBased ? parseInt(seats) : 1,
+      seats: currentPlan?.seatBased ? parseInt(seats) : 1,
     };
 
     onAddTool(newTool);

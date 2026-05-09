@@ -4,14 +4,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft } from 'lucide-react';
 import Link from 'next/link';
-import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { ToolSelector } from '@/components/forms/tool-selector';
 import { ToolCard } from '@/components/forms/tool-card';
 import { TeamDetailsForm } from '@/components/forms/team-details-form';
 import { AuditSubmitButton } from '@/components/forms/audit-submit-button';
 import { useAuditStore } from '@/store/audit-store';
-import { generateMockAudit } from '@/lib/utils/mock-audit-generator';
+import { generateAuditReport } from '@/lib/utils/mock-audit-generator';
 
 export default function AuditPage() {
   const router = useRouter();
@@ -47,8 +46,9 @@ export default function AuditPage() {
 
   // Hydrate store from localStorage
   useEffect(() => {
-    useAuditStore.persist.rehydrate();
-    setIsHydrated(true);
+    void Promise.resolve(useAuditStore.persist.rehydrate()).then(() => {
+      setIsHydrated(true);
+    });
   }, []);
 
   const handleGenerateAudit = async (data: {
@@ -68,8 +68,8 @@ export default function AuditPage() {
     // Simulate API call
     await new Promise((resolve) => setTimeout(resolve, 1500));
 
-    // Generate mock audit
-    const auditResult = generateMockAudit(
+    // Generate audit
+    const auditResult = generateAuditReport(
       tools,
       data.company,
       data.email,
@@ -110,7 +110,7 @@ export default function AuditPage() {
           </Link>
           <h1 className="text-3xl font-bold text-gray-900">AI Spend Audit</h1>
           <p className="text-gray-600 mt-1">
-            Tell us about your AI tools and we'll find savings.
+            Tell us about your AI tools and we&apos;ll find savings.
           </p>
         </div>
       </div>
