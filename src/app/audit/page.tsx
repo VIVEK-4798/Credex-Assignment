@@ -1,0 +1,194 @@
+'use client';
+
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowLeft } from 'lucide-react';
+import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { Card } from '@/components/ui/card';
+import { ToolSelector } from '@/components/forms/tool-selector';
+import { ToolCard } from '@/components/forms/tool-card';
+import { TeamDetailsForm } from '@/components/forms/team-details-form';
+import { AuditSubmitButton } from '@/components/forms/audit-submit-button';
+import { useAuditStore } from '@/store/audit-store';
+import { generateMockAudit } from '@/lib/utils/mock-audit-generator';
+
+export default function AuditPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [isHydrated, setIsHydrated] = useState(false);
+
+  // Zustand store
+  const {
+    tools,
+    teamSize,
+    email,
+    company,
+    primaryUseCase,
+    addTool,
+    removeTool,
+    setTeamSize,
+    setEmail,
+    setCompany,
+    setPrimaryUseCase,
+  } = useAuditStore((state) => ({
+    tools: state.tools,
+    teamSize: state.teamSize,
+    email: state.email,
+    company: state.company,
+    primaryUseCase: state.primaryUseCase,
+    addTool: state.addTool,
+    removeTool: state.removeTool,
+    setTeamSize: state.setTeamSize,
+    setEmail: state.setEmail,
+    setCompany: state.setCompany,
+    setPrimaryUseCase: state.setPrimaryUseCase,
+  }));
+
+  // Hydrate store from localStorage
+  useEffect(() => {
+    useAuditStore.persist.rehydrate();
+    setIsHydrated(true);
+  }, []);
+
+  const handleGenerateAudit = async (data: {
+    company: string;
+    email: string;
+    teamSize: number;
+    primaryUseCase: string;
+  }) => {
+    setIsLoading(true);
+
+    // Update store with team info
+    setCompany(data.company);
+    setEmail(data.email);
+    setTeamSize(data.teamSize);
+    setPrimaryUseCase(data.primaryUseCase);
+
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 1500));
+
+    // Generate mock audit
+    const auditResult = generateMockAudit(
+      tools,
+      data.company,
+      data.email,
+      data.teamSize,
+      data.primaryUseCase
+    );
+
+    // Store result in localStorage for the results page
+    localStorage.setItem('audit-result', JSON.stringify(auditResult));
+
+    // Navigate to results page
+    router.push(`/results/${auditResult.id}`);
+
+    setIsLoading(false);
+  };
+
+  if (!isHydrated) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white flex items-center justify-center">
+        <div className="text-center">
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-gray-50 to-white">
+      {/* Header */}
+      <div className="border-b border-gray-200 bg-white sticky top-0 z-10">
+        <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+          <Link
+            href="/"
+            className="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 mb-6"
+          >
+            <ArrowLeft className="w-4 h-4" />
+            Back
+          </Link>
+          <h1 className="text-3xl font-bold text-gray-900">AI Spend Audit</h1>
+          <p className="text-gray-600 mt-1">
+            Tell us about your AI tools and we'll find savings.
+          </p>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <section className="px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-7xl">
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Left Content */}
+            <div className="lg:col-span-2 space-y-8">
+              {/* Tool Selection */}
+              <Card className="p-8 border-gray-200">
+                <h2 className="text-2xl font-bold text-gray-900 mb-6">
+                  Your AI Tools
+                </h2>
+
+                {tools.length === 0 && (
+                  <div className="text-center py-8 px-4">
+                    <p className="text-gray-500 mb-4">
+                      Add your first AI tool to begin your audit.
+                    </p>
+                  </div>
+                )}
+
+                {tools.length > 0 && (
+                  <div className="mb-8 space-y-3">
+                    {tools.map((tool) => (
+                      <ToolCard
+                        key={tool.id}
+                        tool={tool}
+                        onRemove={removeTool}
+                      />
+                    ))}
+                  </div>
+                )}
+
+                <ToolSelector onAddTool={addTool} existingTools={tools} />
+              </Card>
+
+              {/* Team Info Form */}
+              {tools.length > 0 && (
+                <TeamDetailsForm
+                  onSubmit={handleGenerateAudit}
+                  defaultValues={{
+                    company,
+                    email,
+                    teamSize,
+                    primaryUseCase,
+                  }}
+                  isLoading={isLoading}
+                />
+              )}
+            </div>
+
+            {/* Summary Sidebar */}
+            <div className="lg:col-span-1">
+              <AuditSubmitButton
+                tools={tools}
+                company={company}
+                email={email}
+                teamSize={teamSize}
+                isLoading={isLoading}
+                onSubmit={() => {
+                  // Trigger form submission via the form
+                  const form = document.querySelector(
+                    'form'
+                  ) as HTMLFormElement;
+                  if (form) {
+                    form.dispatchEvent(
+                      new Event('submit', { bubbles: true, cancelable: true })
+                    );
+                  }
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  );
+}
