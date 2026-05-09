@@ -9,10 +9,9 @@ import { Card } from '@/components/ui/card';
 import { CheckCircle2 } from 'lucide-react';
 
 const teamDetailsSchema = z.object({
-  company: z.string().min(1, 'Company name is required'),
-  email: z.string().email('Valid email is required'),
   teamSize: z.number().min(1, 'Team size must be at least 1'),
   primaryUseCase: z.string().min(1, 'Primary use case is required'),
+  website: z.string().max(0).optional(),
 });
 
 type TeamDetailsFormData = z.infer<typeof teamDetailsSchema>;
@@ -45,10 +44,9 @@ export function TeamDetailsForm({
   } = useForm<TeamDetailsFormData>({
     resolver: zodResolver(teamDetailsSchema),
     defaultValues: {
-      company: defaultValues?.company || '',
-      email: defaultValues?.email || '',
       teamSize: defaultValues?.teamSize || 1,
       primaryUseCase: defaultValues?.primaryUseCase || '',
+      website: '',
     },
   });
 
@@ -62,39 +60,14 @@ export function TeamDetailsForm({
       </div>
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-        {/* Company Name */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Company Name
-          </label>
-          <Input
-            type="text"
-            placeholder="Acme Inc"
-            {...register('company')}
-            disabled={isLoading}
-            className={errors.company ? 'border-red-500' : ''}
-          />
-          {errors.company && (
-            <p className="mt-1 text-sm text-red-500">{errors.company.message}</p>
-          )}
-        </div>
-
-        {/* Email */}
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">
-            Email
-          </label>
-          <Input
-            type="email"
-            placeholder="you@company.com"
-            {...register('email')}
-            disabled={isLoading}
-            className={errors.email ? 'border-red-500' : ''}
-          />
-          {errors.email && (
-            <p className="mt-1 text-sm text-red-500">{errors.email.message}</p>
-          )}
-        </div>
+        <input
+          type="text"
+          tabIndex={-1}
+          autoComplete="off"
+          aria-hidden="true"
+          className="hidden"
+          {...register('website')}
+        />
 
         {/* Team Size */}
         <div>
@@ -122,7 +95,7 @@ export function TeamDetailsForm({
           <label className="block text-sm font-medium text-gray-700 mb-3">
             Primary Use Case
           </label>
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {USE_CASES.map((useCase) => (
               <label
                 key={useCase}

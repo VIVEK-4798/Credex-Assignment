@@ -1,20 +1,18 @@
 'use client';
 
-import { CheckCircle2, AlertCircle } from 'lucide-react';
+import { AlertCircle, CheckCircle2 } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { UserToolInput } from '@/store/audit-store';
 import {
-  formatCurrency,
   calculateAnnualSpend,
   calculateMonthlySpend,
+  formatCurrency,
 } from '@/lib/utils/formatters';
 
 interface AuditSubmitButtonProps {
   tools: UserToolInput[];
-  company: string;
-  email: string;
   teamSize: number;
   isLoading?: boolean;
   onSubmit: () => void;
@@ -22,35 +20,30 @@ interface AuditSubmitButtonProps {
 
 export function AuditSubmitButton({
   tools,
-  company,
-  email,
   teamSize,
   isLoading = false,
   onSubmit,
 }: AuditSubmitButtonProps) {
   const totalSpend = calculateMonthlySpend(tools);
   const annualSpend = calculateAnnualSpend(totalSpend);
-
-  const isComplete = tools.length > 0 && company.trim() && email.trim();
+  const isComplete = tools.length > 0 && teamSize >= 1;
 
   const checklist = [
     { label: 'Tools Added', checked: tools.length > 0, count: tools.length },
-    { label: 'Company Info', checked: company.trim().length > 0 },
-    { label: 'Email', checked: email.trim().length > 0 },
     { label: 'Team Size', checked: teamSize >= 1 },
+    { label: 'Email Capture', checked: true },
   ];
 
   return (
-    <Card className="sticky top-32 p-6 border-gray-200 bg-gradient-to-br from-blue-50 to-indigo-50 space-y-6">
+    <Card className="sticky top-32 space-y-6 border-gray-200 bg-gradient-to-br from-blue-50 to-indigo-50 p-6">
       <div>
-        <h3 className="text-lg font-bold text-gray-900 mb-1">Audit Summary</h3>
+        <h3 className="mb-1 text-lg font-bold text-gray-900">Audit Summary</h3>
         <p className="text-sm text-gray-600">Review before submitting</p>
       </div>
 
-      {/* Spend Summary */}
-      <div className="space-y-3 pb-6 border-b border-gray-200">
+      <div className="space-y-3 border-b border-gray-200 pb-6">
         <div>
-          <p className="text-sm text-gray-600 mb-1">Current Monthly Spend</p>
+          <p className="mb-1 text-sm text-gray-600">Current Monthly Spend</p>
           <p className="text-3xl font-bold text-blue-600">
             {formatCurrency(totalSpend)}
           </p>
@@ -63,20 +56,19 @@ export function AuditSubmitButton({
         </div>
       </div>
 
-      {/* Checklist */}
       <div>
-        <p className="text-sm font-semibold text-gray-900 mb-3">Form Status</p>
+        <p className="mb-3 text-sm font-semibold text-gray-900">Form Status</p>
         <div className="space-y-2">
           {checklist.map((item) => (
             <div key={item.label} className="flex items-center gap-3">
               <div
-                className={`w-5 h-5 rounded-full flex items-center justify-center text-xs font-semibold transition-colors ${
+                className={`flex h-5 w-5 items-center justify-center rounded-full text-xs font-semibold transition-colors ${
                   item.checked
                     ? 'bg-green-100 text-green-700'
                     : 'bg-gray-200 text-gray-600'
                 }`}
               >
-                {item.checked ? '✓' : '○'}
+                {item.checked ? 'OK' : '-'}
               </div>
               <span className="text-sm text-gray-700">{item.label}</span>
               {item.count !== undefined && (
@@ -89,17 +81,15 @@ export function AuditSubmitButton({
         </div>
       </div>
 
-      {/* Status Message */}
       {!isComplete && (
-        <div className="flex gap-2 p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-          <AlertCircle className="w-4 h-4 text-yellow-600 flex-shrink-0 mt-0.5" />
+        <div className="flex gap-2 rounded-lg border border-yellow-200 bg-yellow-50 p-3">
+          <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-yellow-600" />
           <p className="text-xs text-yellow-800">
-            Add at least one tool and complete your information to generate audit.
+            Add at least one tool to generate your audit.
           </p>
         </div>
       )}
 
-      {/* Submit Button */}
       <Button
         onClick={onSubmit}
         disabled={!isComplete || isLoading}
@@ -108,19 +98,19 @@ export function AuditSubmitButton({
       >
         {isLoading ? (
           <>
-            <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
+            <div className="mr-2 h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
             Generating Audit...
           </>
         ) : (
           <>
-            <CheckCircle2 className="w-5 h-5 mr-2" />
+            <CheckCircle2 className="mr-2 h-5 w-5" />
             Generate Audit Report
           </>
         )}
       </Button>
 
-      <p className="text-xs text-gray-600 text-center">
-        ⚡ Takes about 30 seconds to analyze
+      <p className="text-center text-xs text-gray-600">
+        Email is optional after your results are ready.
       </p>
     </Card>
   );

@@ -21,26 +21,18 @@ export default function AuditPage() {
   const {
     tools,
     teamSize,
-    email,
-    company,
     primaryUseCase,
     addTool,
     removeTool,
     setTeamSize,
-    setEmail,
-    setCompany,
     setPrimaryUseCase,
   } = useAuditStore((state) => ({
     tools: state.tools,
     teamSize: state.teamSize,
-    email: state.email,
-    company: state.company,
     primaryUseCase: state.primaryUseCase,
     addTool: state.addTool,
     removeTool: state.removeTool,
     setTeamSize: state.setTeamSize,
-    setEmail: state.setEmail,
-    setCompany: state.setCompany,
     setPrimaryUseCase: state.setPrimaryUseCase,
   }));
 
@@ -52,16 +44,13 @@ export default function AuditPage() {
   }, []);
 
   const handleGenerateAudit = async (data: {
-    company: string;
-    email: string;
     teamSize: number;
     primaryUseCase: string;
+    website?: string;
   }) => {
     setIsLoading(true);
 
     // Update store with team info
-    setCompany(data.company);
-    setEmail(data.email);
     setTeamSize(data.teamSize);
     setPrimaryUseCase(data.primaryUseCase);
 
@@ -71,17 +60,29 @@ export default function AuditPage() {
     // Generate audit
     const auditResult = generateAuditReport(
       tools,
-      data.company,
-      data.email,
+      '',
+      '',
       data.teamSize,
       data.primaryUseCase
     );
 
-    // Store result in localStorage for the results page
-    localStorage.setItem('audit-result', JSON.stringify(auditResult));
+    const savedAudit = await saveAudit({
+      ...auditResult,
+      website: data.website,
+    });
+    const publicId = savedAudit?.publicId || auditResult.id;
 
-    // Navigate to results page
-    router.push(`/results/${auditResult.id}`);
+    const publicAuditResult = {
+      ...auditResult,
+      id: publicId,
+      company: '',
+      email: '',
+      aiSummary: '',
+    };
+
+    localStorage.setItem('audit-result', JSON.stringify(publicAuditResult));
+
+    router.push(`/results/${publicId}`);
 
     setIsLoading(false);
   };
@@ -155,8 +156,6 @@ export default function AuditPage() {
                 <TeamDetailsForm
                   onSubmit={handleGenerateAudit}
                   defaultValues={{
-                    company,
-                    email,
                     teamSize,
                     primaryUseCase,
                   }}
@@ -169,8 +168,6 @@ export default function AuditPage() {
             <div className="lg:col-span-1">
               <AuditSubmitButton
                 tools={tools}
-                company={company}
-                email={email}
                 teamSize={teamSize}
                 isLoading={isLoading}
                 onSubmit={() => {
@@ -191,4 +188,22 @@ export default function AuditPage() {
       </section>
     </div>
   );
+}
+
+async function saveAudit(auditResult: unknown): Promise<{ publicId: string } | null> {
+  try {
+    const response = await fetch('/api/audits', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(auditResult),
+    });
+
+    if (!response.ok) return null;
+
+    return (await response.json()) as { publicId: string };
+  } catch {
+    return null;
+  }
 }

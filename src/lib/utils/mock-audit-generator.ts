@@ -2,9 +2,11 @@ import { UserToolInput } from '@/store/audit-store';
 import { runAuditEngine } from '@/lib/audit-engine';
 import { AI_TOOLS } from '@/data/tools';
 import { AuditRecommendation as EngineRecommendation } from '@/types/audit';
+import { getFallbackSummary } from '@/lib/ai/fallback-summary';
 
 export interface AuditRecommendation {
   id: string;
+  toolName: string;
   title: string;
   description: string;
   category:
@@ -15,8 +17,11 @@ export interface AuditRecommendation {
     | 'optimized'
     | 'credits';
   monthlyRealizedSavings: number;
+  priority: 'low' | 'medium' | 'high';
   effort: 'low' | 'medium' | 'high';
   confidenceScore: number;
+  currentPlan: string;
+  recommendedPlan: string;
   implementationDifficulty: string;
   estimatedMigrationTime: string;
   actionLabel: string;
@@ -36,6 +41,7 @@ export interface AuditResult {
   estimatedAnnualSavings: number;
   savingsPercentage: number;
   optimizedOutcome: string;
+  aiSummary: string;
   tools: UserToolInput[];
   recommendations: AuditRecommendation[];
   generatedAt: string;
@@ -57,7 +63,7 @@ export function generateAuditReport(
   const currentAnnualSpend = engineResult.currentMonthlySpend * 12;
   const estimatedAnnualSpend = engineResult.optimizedMonthlySpend * 12;
 
-  return {
+  const result: AuditResult = {
     id: createAuditId(),
     company,
     email,
@@ -71,11 +77,17 @@ export function generateAuditReport(
     estimatedAnnualSavings: engineResult.totalAnnualSavings,
     savingsPercentage: engineResult.totalSavingsPercentage,
     optimizedOutcome: engineResult.optimizedOutcome,
+    aiSummary: '',
     tools,
     recommendations: engineResult.recommendations
       .map(toLegacyRecommendation)
       .slice(0, 5),
     generatedAt: new Date().toISOString(),
+  };
+
+  return {
+    ...result,
+    aiSummary: getFallbackSummary(result),
   };
 }
 
@@ -90,12 +102,16 @@ function toLegacyRecommendation(
 
   return {
     id: recommendation.id,
+    toolName,
     title: getRecommendationTitle(recommendation, toolName),
     description: recommendation.reason,
     category: recommendation.type,
     monthlyRealizedSavings: recommendation.monthlySavings,
+    priority: recommendation.priority,
     effort: recommendation.effortLevel,
     confidenceScore: recommendation.confidenceScore,
+    currentPlan: recommendation.currentPlan,
+    recommendedPlan: recommendation.recommendedPlan,
     implementationDifficulty: recommendation.implementationDifficulty,
     estimatedMigrationTime: recommendation.estimatedMigrationTime,
     actionLabel: recommendation.actionLabel,
