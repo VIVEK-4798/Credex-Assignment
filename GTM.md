@@ -148,6 +148,244 @@
 
 ### Core Message
 
+**Headline**: "See exactly where your AI budget goes"
+
+**Supporting copy**: 
+- For finance: "Free audit in 2 minutes. Share results with stakeholders instantly."
+- For tech leads: "Find AI tool consolidation opportunities. Same logic we pay for on expensive tools."
+
+### CTAs by Persona
+
+**Finance Manager**:
+- "Free spend audit" (credibility, no credit card)
+- "See savings report" (benefit-driven)
+
+**Engineering Lead**:
+- "Find tool overlap" (problem-solving)
+- "Get recommendations" (actionable)
+
+**CISO**:
+- "Get tool inventory" (security-driven)
+- "Audit AI access" (compliance-driven)
+
+---
+
+## Launch Plan (Months 1–6)
+
+### Month 1: Soft Launch
+- Twitter + founder network (warm intros)
+- Goal: 1,000 audits, 100 testimonials
+- Success metric: 70%+ completion rate
+
+### Month 2: Public Launch
+- Product Hunt (main launch event)
+- HackerNews
+- Goal: 5,000 audits, 500 leads
+- Success metric: Top 5 in productivity category
+
+### Month 3: Content + Partnerships
+- Publish: "AI Spend Trends Report" (based on audit data)
+- Outreach: 10 partnership pilots
+- Goal: 10,000 audits, 1,000 leads
+- Success metric: 3+ partnerships signed
+
+### Month 4: Paid Acquisition Test
+- $2K Google Ads test
+- LinkedIn sponsored posts
+- Goal: Learn CAC + ROAS
+- Success metric: < $50 CAC on paid channels
+
+### Month 5: Sales Team Onboarding
+- Hire SDR / BDR
+- Outbound to 100 target companies
+- Goal: 5 inbound + 5 outbound meetings
+- Success metric: 2+ enterprise pilots
+
+### Month 6: Product Expansion
+- Add team billing
+- Add audit history
+- Premium tier launch
+- Goal: 5 paying customers, $5K MRR
+
+---
+
+## Unit Economics
+
+### Customer Acquisition Cost (CAC)
+
+| Channel | CAC | Volume | Notes |
+|---------|-----|--------|-------|
+| Organic | $0 | 1,000/mo | Unpaid, high volume |
+| Referral | $50 | 500/mo | Some incentive needed |
+| Product Hunt | $100 | 1,000 | One-time event |
+| Google Ads | $75 | 200 | Paid search, scalable |
+| Sales | $5,000 | 1 | Enterprise, high ACV |
+
+### Customer Lifetime Value (LTV)
+
+**Freemium Model**:
+```
+Free tier: $0 ARPU, 70% of users
+- Lead capture: 30% rate
+- Lead → trial: 10% rate
+- CAC: $0, Value: $0
+
+Premium tier: $99/mo, 30% of users
+- Churn: 5% MOM (95% retention)
+- LTV: $99 × 12 ÷ 0.05 = $23,760
+- CAC: $500 (blended)
+- LTV:CAC: 47.5x ✅
+```
+
+**Enterprise Model**:
+```
+Enterprise: $5K–$20K/mo
+- Contract length: 12 months
+- LTV: $60K–$240K (12-month deals)
+- CAC: $5,000–$10,000
+- LTV:CAC: 6–48x ✅
+```
+
+---
+
+## Competitive Positioning
+
+### Competitor Matrix
+
+| Aspect | Us | Spreadsheets | Generic Spend Tools | Procurement Platforms |
+|--------|----|----|----|----|
+| Speed | 2 min | 30 min | 5 min | 1 hour |
+| Cost | Free | Free | $99–$999/mo | $5K–$50K/mo |
+| Signup required | No | No | Yes | Yes |
+| Deterministic | Yes | N/A | No (AI) | Yes |
+| Industry-specific | AI-only | No | Maybe | Yes |
+| **Winner** | ✅ | Tied | Us | Them |
+
+**Our position**: Fast + free + transparent (beats everything for acquisition). Complementary to platforms (not competitive).
+
+---
+
+## Success Metrics
+
+### Phase 1 (Months 1–3): Validation
+
+| Metric | Target | Status |
+|--------|--------|--------|
+| Audits generated | 10,000+ | TBD |
+| Leads captured | 500+ | TBD |
+| Lead quality (% engaged) | > 20% | TBD |
+| NPS | > 40 | TBD |
+| Share rate | > 20% | TBD |
+| Testimonials | 20+ | TBD |
+
+### Phase 2 (Months 4–6): Monetization
+
+| Metric | Target | Status |
+|--------|--------|--------|
+| Premium sign-ups | 50+ | TBD |
+| MRR | $5,000+ | TBD |
+| Partnerships | 3+ | TBD |
+| Enterprise pilots | 2+ | TBD |
+| CAC (paid) | < $100 | TBD |
+
+### Phase 3 (Months 7–12): Scale
+
+| Metric | Target | Status |
+|--------|--------|--------|
+| Paid users | 200+ | TBD |
+| MRR | $20,000+ | TBD |
+| Enterprise contracts | 5+ | TBD |
+| Monthly audits | 50,000+ | TBD |
+| Retention (MOM) | > 85% | TBD |
+
+---
+
+## Product Roadmap (Linked to GTM)
+
+### MVP (Now)
+- ✅ Free audit tool
+- ✅ Shareable results
+- ✅ Lead capture (optional)
+
+### Phase 1 (Month 2)
+- [ ] Audit history (for logged-in users)
+- [ ] Monthly trends
+- [ ] Export (PDF, CSV)
+
+### Phase 2 (Month 4)
+- [ ] Premium tier ($99/mo)
+- [ ] Team management
+- [ ] Custom rules per company
+- [ ] API access
+
+### Phase 3 (Month 6)
+- [ ] Bulk import (CSV/JSON)
+- [ ] Negotiation playbooks
+- [ ] Integration marketplace
+- [ ] Advanced analytics
+
+---
+
+## Budget (First 12 Months)
+
+| Category | Cost | Notes |
+|----------|------|-------|
+| **Infrastructure** | $5K | Vercel, Supabase, OpenAI |
+| **Marketing** | $50K | PPC, content, events |
+| **Sales** | $20K | SDR, tools, travel |
+| **Operations** | $15K | Legal, insurance, misc |
+| **Personnel** | $0 | Founder-led (initial) |
+| **Total** | $90K | ~$7,500/month burn |
+
+**Funded by**: SaaS revenue + personal savings
+
+---
+
+## Risk Mitigation
+
+### Risk 1: Larger Competitors Enter Market
+**Mitigation**:
+- Move fast to partnerships (establish moat before giants notice)
+- Build community (network effects)
+- Specialize in AI (depth > breadth)
+
+### Risk 2: User Churn (No Repeat Audits)
+**Mitigation**:
+- Freemium model (premium for history)
+- Quarterly "re-audit" emails
+- Competitor benchmarking (gives repeat reason)
+
+### Risk 3: Market Adoption Slower Than Expected
+**Mitigation**:
+- Pivot to "selling to vendors" (instead of end users)
+- Partner with consultants (white-label)
+- B2B2C through finance platforms
+
+### Risk 4: Audit Quality Issues
+**Mitigation**:
+- Transparent rules (users see the logic)
+- Feedback loop ("Did this help?")
+- Customer support (quick feedback incorporation)
+
+---
+
+## Timeline & Milestones
+
+| Month | Focus | Goal |
+|-------|-------|------|
+| 1 | Soft launch + content | 1,000 audits |
+| 2 | Product Hunt + partnerships | 10,000 audits, 3 partnerships |
+| 3 | SEO + paid experiments | 20,000 audits, 5 partnerships |
+| 4 | Sales team + product iteration | 5 inbound meetings, $500 MRR |
+| 5 | Enterprise focus + product expansion | 10 inbound meetings, $2,000 MRR |
+| 6 | Premium launch + partnership revenue | $5,000 MRR, 3 enterprise pilots |
+
+---
+
+**Last Updated**: May 11, 2025  
+**Owner**: Founder (CEO)  
+**Next review**: After Product Hunt launch
+
 **"Uncover thousands in hidden AI spending in 2 minutes."**
 
 Why this works:
