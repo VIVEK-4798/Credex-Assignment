@@ -17,24 +17,14 @@ export default function AuditPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
-  // Zustand store
-  const {
-    tools,
-    teamSize,
-    primaryUseCase,
-    addTool,
-    removeTool,
-    setTeamSize,
-    setPrimaryUseCase,
-  } = useAuditStore((state) => ({
-    tools: state.tools,
-    teamSize: state.teamSize,
-    primaryUseCase: state.primaryUseCase,
-    addTool: state.addTool,
-    removeTool: state.removeTool,
-    setTeamSize: state.setTeamSize,
-    setPrimaryUseCase: state.setPrimaryUseCase,
-  }));
+  // Zustand store - use individual selectors to avoid infinite loop
+  const tools = useAuditStore((state) => state.tools);
+  const teamSize = useAuditStore((state) => state.teamSize);
+  const primaryUseCase = useAuditStore((state) => state.primaryUseCase);
+  const addTool = useAuditStore((state) => state.addTool);
+  const removeTool = useAuditStore((state) => state.removeTool);
+  const setTeamSize = useAuditStore((state) => state.setTeamSize);
+  const setPrimaryUseCase = useAuditStore((state) => state.setPrimaryUseCase);
 
   // Hydrate store from localStorage
   useEffect(() => {
