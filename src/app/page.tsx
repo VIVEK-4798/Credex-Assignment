@@ -141,11 +141,11 @@ export default function Home() {
       <section className="px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-2xl">
           <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-            What You'll Discover
+            What You&apos;ll Discover
           </h2>
           <div className="space-y-6">
             {[
-              'Duplicate tool subscriptions you didn\'t know about',
+              'Duplicate tool subscriptions you didn&apos;t know about',
               'Unused features in your current plans',
               'Cost-effective alternatives for your needs',
               'Negotiation tips with vendors',
